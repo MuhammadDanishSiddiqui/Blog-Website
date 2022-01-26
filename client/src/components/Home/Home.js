@@ -3,14 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Post from "./Post"
+import { Link } from "react-router-dom"
 
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+const posts = [{ _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }, { _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }, { _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }, { _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }]
 
 const useStyles = makeStyles((theme) => ({
     banner: {
+        width: "100%",
         backgroundColor: "gray",
         backgroundImage: `url("https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg")`,
         height: "50vh",
@@ -31,19 +31,20 @@ const useStyles = makeStyles((theme) => ({
     leftSide: {
         padding: "10px",
         "& .MuiTypography-root": {
-            margin: "10px",
+            padding: "10px",
             cursor: "pointer"
+        },
+        "& .MuiTypography-root:hover": {
+            backgroundColor: "gray",
+            color: "white"
         }
     },
     rightSide: {
         padding: "10px",
-        borderLeft: "1px solid gray"
-    },
-    root: {
-        height: "300px"
-    },
-    media: {
-        height: 140,
+        borderLeft: "1px solid gray",
+        [theme.breakpoints.down("sm")]: {
+            border: "none"
+        }
     },
 }));
 
@@ -57,32 +58,20 @@ function Home() {
             </div>
             <Grid container>
                 <Grid item sm={3} xs={12} className={classes.leftSide}>
-                    <Button variant="contained" color="primary">Create Blog</Button>
+                    <Link to="/blog/create">
+                        <Button fullWidth variant="contained" color="primary">Create Blog</Button>
+                    </Link>
+
                     <Typography>All Categories</Typography>
                     <Typography>Music</Typography>
                     <Typography>Movies</Typography>
                     <Typography>Sports</Typography>
                     <Typography>Tech</Typography>
                 </Grid>
-                <Grid container item sm={9} xs={12} className={classes.rightSide} spacing={2}>
-                    <Grid item md={4} sm={6} xs={12} >
-                        <Card className={classes.root}>
-                            <CardActionArea>
-                                <CardMedia
-                                    className={classes.media}
-                                    image="https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg"
-                                    title="Contemplative Reptile"
-                                />
-                                <CardContent style={{ textAlign: "center" }}>
-                                    <Typography variant="body2" color="textSecondary">Music</Typography>
-                                    <Typography variant="h5" component="h2">Some fake title here</Typography>
-                                    <Typography variant="body2" color="textSecondary">Author: random author</Typography>
-
-                                    <Typography color="textSecondary" component="p">Lizards are a widespread group of squamate reptile...</Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Grid>
+                <Grid container style={{ margin: 0 }} item sm={9} xs={12} className={classes.rightSide} spacing={2}>
+                    {posts.map(post => {
+                        return <Post key={post._id} _id={post._id} category={post.category} author={post.author} title={post.title} description={post.description} imgsrc={post.imgsrc} />
+                    })}
                 </Grid>
             </Grid>
         </>
