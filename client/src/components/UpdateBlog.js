@@ -82,13 +82,15 @@ function UpdateBlog() {
         if (message) {
             alert(message)
             dispatch({ type: "RESET_UPDATE_BLOG" })
-            navigate("/")
+            navigate("/blog/detail/" + id)
         }
         if (detailError && detailError.error) {
             alert(detailError.error)
+            dispatch(clearErrors())
         }
-        if (detailError && detailError.message) {
+        else if (detailError && detailError.message) {
             alert(detailError.message)
+            dispatch(clearErrors())
         }
 
     }, [message, detailError])

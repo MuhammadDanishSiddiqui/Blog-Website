@@ -52,10 +52,14 @@ const blogDetail = (id) => async (dispatch) => {
     }
 }
 
-const allBlogs = () => async (dispatch) => {
+const allBlogs = (category) => async (dispatch) => {
     try {
+        let url = "/api/blog"
+        if (category) {
+            url = `/api/blog?category=${category}`
+        }
         dispatch({ type: "ALL_BLOGS_REQUEST" })
-        const { data } = await axios({ url: "/api/blog", method: "GET" })
+        const { data } = await axios({ url, method: "GET" })
         dispatch({ type: "ALL_BLOGS_SUCCESS", payload: data })
     } catch (error) {
         if (!error) {

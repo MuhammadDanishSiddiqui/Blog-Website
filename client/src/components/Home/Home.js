@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Post from "./Post"
 import { Link } from "react-router-dom"
-
-const posts = [{ _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }, { _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }, { _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }, { _id: 1, category: "Music", author: "fake", title: "Uip!!!!", description: "aas as h  asdah asdlorem ispadasdamjkkadas  adajjdajsdas dadajm", imgsrc: "https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" }]
+import { allBlogs, clearErrors } from "../../redux/actions/blogActions"
+import { useSelector, useDispatch } from "react-redux"
+import CircularProgress from "@material-ui/core/CircularProgress"
 
 const useStyles = makeStyles((theme) => ({
     banner: {
@@ -50,7 +51,24 @@ const useStyles = makeStyles((theme) => ({
 
 
 function Home() {
+    const [category, setCategory] = useState("")
+    const dispatch = useDispatch()
+    const { blogs, loading, error } = useSelector(state => state.allBlogs)
     const classes = useStyles();
+
+    useEffect(() => {
+        dispatch(allBlogs(category))
+    }, [category])
+
+    useEffect(() => {
+        if (error && error.error) {
+            alert(error.error)
+        }
+        else if (error && error.message) {
+            alert(error.message)
+        }
+        dispatch(clearErrors())
+    }, [error])
     return (
         <>
             <div className={classes.banner}>
@@ -62,17 +80,21 @@ function Home() {
                         <Button fullWidth variant="contained" color="primary">Create Blog</Button>
                     </Link>
 
-                    <Typography>All Categories</Typography>
-                    <Typography>Music</Typography>
-                    <Typography>Movies</Typography>
-                    <Typography>Sports</Typography>
-                    <Typography>Tech</Typography>
+                    <Typography onClick={() => setCategory("all")}>All Categories</Typography>
+                    <Typography onClick={() => setCategory("music")}>Music</Typography>
+                    <Typography onClick={() => setCategory("movies")}>Movies</Typography>
+                    <Typography onClick={() => setCategory("sports")}>Sports</Typography>
+                    <Typography onClick={() => setCategory("tech")}>Tech</Typography>
                 </Grid>
-                <Grid container style={{ margin: 0 }} item sm={9} xs={12} className={classes.rightSide} spacing={2}>
-                    {posts.map(post => {
-                        return <Post key={post._id} _id={post._id} category={post.category} author={post.author} title={post.title} description={post.description} imgsrc={post.imgsrc} />
-                    })}
-                </Grid>
+                {
+                    loading ? <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "70%", marginBottom: "20px" }}>
+                        <CircularProgress />
+                    </div> : blogs && blogs[0] ? <Grid container style={{ margin: 0 }} item sm={9} xs={12} className={classes.rightSide} spacing={2}>
+                        {blogs.map(post => {
+                            return <Post key={post._id} _id={post._id} category={post.category} author={post.author} title={post.title} description={post.description} imgsrc={post.imgsrc} />
+                        })}
+                    </Grid> : <Typography style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "70%", marginBottom: "20px" }} >No Blog Found</Typography>
+                }
             </Grid>
         </>
     )
