@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Typography } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Link, useParams } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux"
+import { blogDetail } from "../redux/actions/blogActions"
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -49,21 +52,38 @@ const useStyles = makeStyles((theme) => ({
 
 function PostDetail() {
     const { id } = useParams()
+    const dispatch = useDispatch()
+    const { loading, error, blog } = useSelector(state => state.blogDetail)
     const classes = useStyles();
+
+    useEffect(() => {
+        if (error && error.error) {
+            alert(error.error)
+        }
+        if (error && error.message) {
+            alert(error.message)
+        }
+    }, [error])
+    useEffect(() => {
+        dispatch(blogDetail(id))
+    }, [])
+
     return (
-        <Box className={classes.container}>
-            <img className={classes.blogImage} src="https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg" alt="blog-image" />
-            <Box className={classes.icons}>
-                <Link to={`/blog/update/${id}`}> <EditIcon className={classes.icon} color="primary" /></Link>
-                <DeleteIcon className={classes.icon} color="secondary" />
+        loading ? <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50vh" }}>
+            <CircularProgress />
+        </div> : <Box className={classes.container}>
+                <img className={classes.blogImage} src={blog && blog.imgsrc && blog.imgsrc.url} alt="blog" />
+                <Box className={classes.icons}>
+                    <Link to={`/blog/update/${id}`}> <EditIcon className={classes.icon} color="primary" /></Link>
+                    <DeleteIcon className={classes.icon} color="secondary" />
+                </Box>
+                <Typography className={classes.title}>{blog && blog.title}</Typography>
+                <Box className={classes.metaDetail}>
+                    <Typography color="textSecondary">Author: {blog && blog.author}</Typography>
+                    <Typography color="textSecondary">22 june 2021</Typography>
+                </Box>
+                <Typography className={classes.description}>{blog && blog.description}</Typography>
             </Box>
-            <Typography className={classes.title}>Some fake Titkle</Typography>
-            <Box className={classes.metaDetail}>
-                <Typography color="textSecondary">Author: codewithharry</Typography>
-                <Typography color="textSecondary">22 june 2021</Typography>
-            </Box>
-            <Typography className={classes.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi error dolorem esse laborum autem ullam, facilis aspernatur nisi minima totam incidunt. Doloribus corrupti impedit magnam natus, esse, libero dolorum laboriosam illum maiores, placeat hic perferendis iusto dolor? Doloremque soluta nulla recusandae cupiditate autem, minus repudiandae. Quasi suscipit ducimus expedita perferendis?</Typography>
-        </Box>
     )
 }
 
