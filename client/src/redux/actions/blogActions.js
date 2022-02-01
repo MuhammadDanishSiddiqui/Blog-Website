@@ -3,7 +3,7 @@ import axios from "axios"
 const createBlog = (body) => async (dispatch) => {
     try {
         dispatch({ type: "CREATE_BLOG_REQUEST" })
-        const { data } = await axios({ url: "/api/blog", method: "POST", headers: { "content-type": "multipart/form-data", data: body } })
+        const { data } = await axios({ url: "/api/blog", method: "POST", headers: { "content-type": "multipart/form-data", }, data: body })
         dispatch({ type: "CREATE_BLOG_SUCCESS", payload: data })
     } catch (error) {
         if (!error) {
@@ -16,7 +16,7 @@ const createBlog = (body) => async (dispatch) => {
 const updateBlog = (id, body) => async (dispatch) => {
     try {
         dispatch({ type: "UPDATE_BLOG_REQUEST" })
-        const { data } = await axios({ url: "/api/blog/" + id, method: "PATCH", headers: { "content-type": "multipart/form-data", data: body } })
+        const { data } = await axios({ url: "/api/blog/" + id, method: "PATCH", headers: { "content-type": "multipart/form-data" }, data: body })
         dispatch({ type: "UPDATE_BLOG_SUCCESS", payload: data })
     } catch (error) {
         if (!error) {

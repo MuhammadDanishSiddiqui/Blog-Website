@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom"
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: "0 100px",
+        padding: "0 100px 30px 100px",
         width: "100%",
         [theme.breakpoints.down("xs")]: {
             padding: "0"

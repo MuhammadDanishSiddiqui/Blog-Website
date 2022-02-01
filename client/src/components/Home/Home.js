@@ -8,12 +8,13 @@ import { Link } from "react-router-dom"
 import { allBlogs, clearErrors } from "../../redux/actions/blogActions"
 import { useSelector, useDispatch } from "react-redux"
 import CircularProgress from "@material-ui/core/CircularProgress"
+import BlogImage from "../../blogImg.jpg"
 
 const useStyles = makeStyles((theme) => ({
     banner: {
         width: "100%",
         backgroundColor: "gray",
-        backgroundImage: `url("https://www.bannerflow.com/app/uploads/blog-header-creative-banner.jpg")`,
+        backgroundImage: `url(${BlogImage})`,
         height: "50vh",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

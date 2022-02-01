@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Button } from "@material-ui/core"
+import { Box, Button, CircularProgress } from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
@@ -13,7 +13,7 @@ import { createBlog, clearErrors } from "../redux/actions/blogActions"
 
 const useStyles = makeStyles((theme) => ({
     container: {
-        padding: "0 100px",
+        padding: "0 100px 30px 100px",
         width: "100%",
         [theme.breakpoints.down("xs")]: {
             padding: "0"
@@ -66,7 +66,7 @@ function CreateBlog() {
     const [description, setDescription] = useState("")
     const [title, setTitle] = useState("")
     const [category, setCategory] = useState("")
-    const [imgsrc, setImgsrc] = useState(BlogImg)
+    const [imgsrc, setImgsrc] = useState()
     const [imgPreview, setImgPreview] = useState("")
     const classes = useStyles();
 
@@ -83,6 +83,7 @@ function CreateBlog() {
         const reader = new FileReader()
         reader.onload = () => {
             if (reader.readyState === 2) {
+
                 setImgPreview(reader.result)
                 setImgsrc(e.target.files[0])
             }
@@ -91,6 +92,7 @@ function CreateBlog() {
     }
 
     const handleSubmit = (e) => {
+        console.log(category, title, description)
         dispatch(clearErrors())
         e.preventDefault()
         const formData = new FormData()
@@ -131,7 +133,10 @@ function CreateBlog() {
                     <input type="file" id="blog-image" hidden onChange={handleImageChange} />
 
                     <TextField value={title} onChange={e => setTitle(e.target.value)} className={classes.title} id="standard-basic" placeholder="Title" />
-                    <Button disabled={loading} type="submit" variant="contained" color="primary">Publish</Button>
+                    {
+                        true ? <CircularProgress /> : <Button disabled={loading} type="submit" variant="contained" color="primary">Publish</Button>
+                    }
+
                 </Box>
                 {
                     error && error.errors && error.errors.title && error.errors.title.message && <span style={{ color: "red" }}>{error.errors.title.message}</span>

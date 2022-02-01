@@ -11,9 +11,10 @@ cloudinary.config({
     api_secret: process.env.API_SECRET
 })
 require("./db/conn")
-
+const blogRouter = require("./routes/blog")
 app.use(cors())
 app.use(express.json())
+app.use(blogRouter)
 
 
 const port = process.env.PORT || 5000

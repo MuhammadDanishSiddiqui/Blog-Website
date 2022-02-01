@@ -33,7 +33,7 @@ function Post({ _id, category, author, title, description, imgsrc }) {
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={imgsrc}
+                        image={imgsrc.url}
                         title="Contemplative Reptile"
                     />
                     <CardContent style={{ textAlign: "center" }}>
